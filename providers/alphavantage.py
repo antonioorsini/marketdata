@@ -1,7 +1,7 @@
 __author__ = 'Antonio Orsini'
 __doc__    = 'Module to request data from Alpha Vantage'
 
-from   urllib.parse            import urlencode
+from   urllib.parse import urlencode
 import requests
 import pandas as pd
 import numpy as np
@@ -63,9 +63,9 @@ class AlphaVantageRequest():
         # define error 404
         if str(req) == '<Response [404]>': raise ValueError('response is 404')
 
-        self.request=req.json()
+        self.requestdoc=req.json()
 
-        return self.parse( self. request )
+        return self.parse( self.requestdoc )
 
     def parse( self ):
         ''' Method to parse the output based on the funcion used during the request '''
@@ -74,29 +74,17 @@ class AlphaVantageRequest():
         data_box = self.data_boxes[self.params['function']]
 
         if 'TIME_SERIES' in self.params['function']:
-            df = pd.DataFrame().from_dict( self.request[data_box] ).transpose()[::-1]
+            df = pd.DataFrame().from_dict( self.requestdoc[data_box] ).transpose()[::-1]
             df.columns = [x[3:] for x in df.columns]
         
         if self.params['function'] == 'OVERVIEW':
-            df = pd.DataFrame(self.request, index = [0])
+            df = pd.DataFrame(self.requestdoc, index = [0])
 
         else:
-            df = pd.DataFrame().from_dict( self.request[data_box] )
+            df = pd.DataFrame().from_dict( self.requestdoc[data_box] )
 
         self.data = df
         return(df)
-
-#===============================================================================
-# Test
-#===============================================================================
-
-def main():
-    avr = AlphaVantageRequest()
-    avr.request( function = 'INCOME_STATEMENT' )
-    print(avr.data)
-
-if __name__ == '__main__':
-    main()
 
 
 

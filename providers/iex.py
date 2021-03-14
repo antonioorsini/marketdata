@@ -18,9 +18,6 @@ class IEXRequest( object ):
             self.base_url = ''
             self.version  = ''
 
-        if token is None:
-            from marketdata.keys import iex_secret_token
-            self.token = iex_secret_token
         self.query_params  = f'?token={self.token}'
         self.logger = setLogger('IEXCloud')
 

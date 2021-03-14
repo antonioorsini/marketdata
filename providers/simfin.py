@@ -3,24 +3,16 @@ __doc__    = 'Module to request data from simfin'
 
 import requests
 import pandas as pd
-
-from functools import reduce
-
 import time
 import gc
 import os
 
-
-from marketdata.storage   import getProviderDataPath
+from   functools import reduce
+from   marketdata.archiving.storage import getProviderDataPath
 
 class SimFinRequest():
     
     def __init__( self, api_key = None ):
-        if api_key is None:
-            from marketdata.keys import simfin_api_key
-            self.api_key = simfin_api_key
-        else:
-            self.api_key = api_key
 
         self.path_fundamental = getProviderDataPath( 'simfin', 'fundamentals' )
         self.path_ohlc        = getProviderDataPath( 'simfin', 'ohlc' )
@@ -85,10 +77,8 @@ class SimFinRequest():
         df.to_csv( self.path_fundamental + '/' + ticker + '.csv', index = False )
 
 
-def splitManualData():
+def splitManualData( path_fundamentals_to_agg, path_files_to_split ):
 
-    path_fundamentals_to_agg   = r'C:\Users\anton\OneDrive\Datasets\projects\marketdata\providers\simfin\manual_downloads\fundamentals_to_aggregate'
-    path_files_to_split        = r'C:\Users\anton\OneDrive\Datasets\projects\marketdata\providers\simfin\manual_downloads\files_to_operate'
     path_ohlc                  = getProviderDataPath( 'simfin', 'ohlc' )
     path_fundamentals          = getProviderDataPath( 'simfin', 'fundamentals' )
 
@@ -121,10 +111,4 @@ def splitManualData():
                 dfx.to_csv(destination+'/'+ticker+'.csv', index = False)
                 del dfx
                 gc.collect()
-# def main():
-#     #sfr = SimFinRequest()
-#     #sfr.getFundamentals(ticker='MSFT', year_start=2000, year_end=2020)
-#     splitManualData()
 
-# if __name__ == '__main__':
-#     main()

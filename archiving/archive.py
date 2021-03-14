@@ -9,12 +9,11 @@ import time
 import os
 import shutil
 
-from misc.utils                           import setLogger
-from marketdata.storage                   import getProviderDataPath, path_tickers
-from marketdata.keys                      import *
-from marketdata.providers.alpha_vantage   import AlphaVantageRequest
-from marketdata.providers.simfin          import SimFinRequest
-from marketdata.providers.yahoofinance    import YahooFinanceRequest
+from misc.utils                        import setLogger
+from marketdata.archiving.storage      import getProviderDataPath, path_tickers
+from marketdata.providers.alphavantage import AlphaVantageRequest
+from marketdata.providers.simfin       import SimFinRequest
+from marketdata.providers.yahoofinance import YahooFinanceRequest
 
 class Archiver( object ):
     ''' class enabling the archiving through different market data api '''
@@ -69,8 +68,8 @@ class Archiver( object ):
             except Exception as e:
                 self.logger.debug('Failed to delete %s. Reason: %s' % (file_path, e))
 
-    def setArchivingAlphaVantageOHLCA( self ):
-        avr = AlphaVantageRequest()
+    def setArchivingAlphaVantageOHLCA( self, token ):
+        avr = AlphaVantageRequest( apikey = token )
         self.requestFunction = lambda x: avr.request( 
             symbol   = x,
             function = 'TIME_SERIES_DAILY_ADJUSTED' 
@@ -81,8 +80,8 @@ class Archiver( object ):
         self.requestFunction = lambda x: YahooFinanceRequest( symbol = x )
         self.path_archive = getProviderDataPath( provider = 'yahoofinance', dtype = 'ohlc' )
 
-    def setArchivingSimFimFundamentals( self ):
-        sfr = SimFinRequest()
+    def setArchivingSimFimFundamentals( self, token ):
+        sfr = SimFinRequest( api_key = token )
         self.requestFunction = lambda x: sfr.getFundamentals(
             ticker = x,
             year_start = 2000,
