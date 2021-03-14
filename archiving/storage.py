@@ -1,4 +1,5 @@
-path_marketdata           = 'C:/Users/anton/OneDrive/Datasets/marketdata'
+from keys.corepaths import path_marektdata
+
 path_single_series        = path_marketdata + '/single_series'
 path_indicators           = path_marketdata + '/indicators'
 path_datasets             = path_marketdata + '/datasets'
