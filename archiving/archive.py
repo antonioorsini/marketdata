@@ -9,7 +9,7 @@ import time
 import os
 import shutil
 
-from misc.utils                        import setLogger
+from utils.generic                     import setLogger
 from marketdata.archiving.storage      import getProviderDataPath, path_tickers
 from marketdata.providers.alphavantage import AlphaVantageRequest
 from marketdata.providers.simfin       import SimFinRequest
